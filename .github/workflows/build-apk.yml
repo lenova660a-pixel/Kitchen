@@ -11,16 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Source Code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          # Убрали cache: 'npm', чтобы action не падал в отсутствие lock-файла, 
+          # либо используйте npm install ниже
 
-      - name: Set up Java JDK
+      - name: Set up Java JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
@@ -30,21 +31,21 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Initialize Capacitor Android Platform
+      - name: Add Android Platform
         run: |
           npx cap add android
           npx cap sync android
 
-      - name: Build Debug APK with Gradle
+      - name: Build APK via Gradle
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
 
-      - name: Upload APK Artifact
+      - name: Upload Output Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: WhatToCook-App-Debug
+          name: WhatToCook-Release-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
