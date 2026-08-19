@@ -1,0 +1,6 @@
+{
+  "appId": "com.sil.whattocook",
+  "appName": "Що приготувати?",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
