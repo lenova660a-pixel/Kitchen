@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🍴 Що приготувати?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+:root {
+    --bg: #EEF4E8;
+    --card-bg: #FFFFFF;
+    --card-tint: #F3F8EE;
+    --primary: #43701E;
+    --primary-light: #DFEED1;
+    --primary-dark: #2A4711;
+    --accent: #E58A00;
+    --accent-light: #FEEBC8;
+    --text: #0F172A;
+    --text-muted: #475569;
+    --text-light: #788A9F;
+    --border: #CBDCC0;
+    --danger: #EF4444;
+    --danger-light: #FEE2E2;
+    --shadow-sm: 0 2px 8px rgba(42, 71, 17, 0.06);
+    --shadow-md: 0 10px 24px rgba(42, 71, 17, 0.12);
+    --radius-sm: 14px;
+    --radius-md: 22px;
+    --radius-lg: 30px;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 95px;
+}
+
+.app-wrapper {
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--bg);
+    min-height: 100vh;
+    position: relative;
+}
+
+.app-header {
+    background: linear-gradient(180deg, #E2EFD8 0%, #D4E8C5 100%);
+    padding: 20px 20px 24px;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border-bottom: 1.5px solid var(--border);
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.logo-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-align: left;
+}
+
+.logo-btn h1 {
+    font-family: 'Comfortaa', cursive;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+
+.logo-btn span { font-size: 1.6rem; }
+
+.lang-picker {
+    display: flex;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 3px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    gap: 2px;
+    box-shadow: var(--shadow-sm);
+}
+
+.lang-btn {
+    border: none;
+    background: transparent;
+    padding: 4px 6px;
+    border-radius: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    opacity: 0.5;
+}
+
+.lang-btn.active {
+    background: var(--primary);
+    opacity: 1;
+    transform: scale(1.08);
+}
+
+.lang-btn svg {
+    width: 20px;
+    height: 15px;
+    border-radius: 3px;
+    display: block;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.search-box {
+    background: #FFFFFF;
+    border-radius: 20px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow-sm);
+    border: 1.5px solid var(--border);
+}
+
+.search-box input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 0.92rem;
+    color: var(--text);
+    background: transparent;
+}
+
+.search-box input::placeholder { color: var(--text-light); }
+
+.view-container { padding: 20px; }
+.view-section { display: none; }
+.view-section.active { display: block; animation: fadeIn 0.25s ease; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.glass-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-family: 'Comfortaa', cursive;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+textarea.fridge-input {
+    width: 100%;
+    min-height: 95px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--text);
+    resize: none;
+    outline: none;
+    transition: all 0.2s;
+    background: #FAFDF7;
+}
+
+textarea.fridge-input:focus {
+    border-color: var(--primary);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.btn-primary {
+    width: 100%;
+    margin-top: 14px;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Comfortaa', cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(42, 71, 17, 0.25);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary:active { transform: scale(0.98); }
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.category-card {
+    background: var(--card-tint);
+    border-radius: var(--radius-sm);
+    padding: 16px 8px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    border: 1.5px solid var(--border);
+    transition: all 0.2s;
+}
+
+.category-card:active { transform: scale(0.96); }
+.category-card .emoji { font-size: 1.9rem; margin-bottom: 6px; display: block; }
+.category-card .label { font-size: 0.76rem; font-weight: 700; color: var(--text); }
+
+.filter-chips {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    scrollbar-width: none;
+}
+.filter-chips::-webkit-scrollbar { display: none; }
+
+.chip {
+    padding: 8px 14px;
+    background: var(--card-tint);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.chip.active {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+}
+
+.recipe-card {
+    background: #FFFFFF;
+    border-radius: var(--radius-md);
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+    border: 1.5px solid var(--border);
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.recipe-card:active { transform: scale(0.98); }
+
+.recipe-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.recipe-card-emoji { font-size: 2.2rem; line-height: 1; }
+.recipe-card-info { flex: 1; padding-right: 24px; }
+
+.recipe-card-title {
+    font-family: 'Comfortaa', cursive;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+
+.recipe-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.badge-ready { background: var(--primary-light); color: var(--primary-dark); }
+.badge-missing { background: var(--accent-light); color: #B45309; }
+
+.recipe-card-ing-list {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-bottom: 10px;
+}
+
+.fav-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    opacity: 0.3;
+    transition: all 0.2s;
+}
+
+.fav-btn.active { opacity: 1; transform: scale(1.1); }
+
+.missing-group-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #B45309;
+    background: var(--accent-light);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    margin: 18px 0 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #FCD34D;
+}
+
+.btn-add-cart {
+    background: #FFFFFF;
+    border: 1px solid #FCD34D;
+    color: #B45309;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--card-tint);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    margin-bottom: 16px;
+}
+
+.detail-header-card {
+    background: linear-gradient(135deg, #FFFFFF 0%, var(--primary-light) 100%);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1.5px solid var(--border);
+}
+
+.detail-title {
+    font-family: 'Comfortaa', cursive;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 8px;
+}
+
+.ingredients-list { list-style: none; margin-top: 10px; }
+
+.ing-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #FFFFFF;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border);
+}
+
+.ing-item.have { background: var(--primary-light); border-color: rgba(67, 112, 30, 0.3); }
+.ing-item.need { background: var(--accent-light); border-color: rgba(229, 138, 0, 0.3); }
+
+.recipe-steps {
+    list-style: none;
+    counter-reset: step-counter;
+    margin-top: 10px;
+}
+
+.recipe-steps li {
+    counter-increment: step-counter;
+    position: relative;
+    padding-left: 36px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #1E293B;
+}
+
+.recipe-steps li::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 24px;
+    height: 24px;
+    background: var(--primary);
+    color: #FFFFFF;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Блок порад та помилок */
+.tips-card {
+    background: #FFFBEB;
+    border-radius: var(--radius-md);
+    padding: 18px;
+    margin-bottom: 20px;
+    border: 1.5px solid #FDE68A;
+}
+
+.tips-title {
+    font-family: 'Comfortaa', cursive;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #B45309;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tips-list {
+    list-style: disc;
+    padding-left: 20px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #78350F;
+}
+
+.tips-list li { margin-bottom: 6px; }
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(243, 248, 238, 0.96);
+    backdrop-filter: blur(12px);
+    padding: 8px 16px 14px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -4px 20px rgba(42, 71, 17, 0.08);
+    border-top: 1.5px solid var(--border);
+    max-width: 480px;
+    margin: 0 auto;
+    z-index: 100;
+}
+
+.nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    position: relative;
+    padding: 4px 8px;
+}
+
+.nav-btn .icon { font-size: 1.35rem; }
+.nav-btn .label { font-size: 0.7rem; font-weight: 700; }
+.nav-btn.active { color: var(--primary); transform: translateY(-2px); }
+
+.cart-count {
+    position: absolute;
+    top: 2px;
+    right: 8px;
+    background: var(--danger);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 1px 5px;
+}
+</style>
+</head>
+<body>
+
+<div class="app-wrapper">
+    <header class="app-header">
+        <div class="header-top">
+            <button class="logo-btn" id="header-logo-btn">
+                <span>🍴</span>
+                <h1 id="i18n-title">Що приготувати?</h1>
+            </button>
+            <div class="lang-picker">
+                <button class="lang-btn active" data-lang="uk" title="Українська">
+                    <svg viewBox="0 0 640 480"><g fill-rule="evenodd" stroke-width="1pt"><path fill="#ffd500" d="M0 0h640v480H0z"/><path fill="#005bbb" d="M0 0h640v240H0z"/></g></svg>
+                </button>
+                <button class="lang-btn" data-lang="en" title="English">
+                    <svg viewBox="0 0 640 480"><path fill="#012169" d="M0 0h640v480H0z"/><path fill="#FFF" d="m75 0 245 180L565 0h75v60L420 240l220 180v60h-75L320 300 75 480H0v-60l220-180L0 60V0h75z"/><path fill="#C8102E" d="m424 288 216 156v36L376 288h48zM640 36 384 216h48l208-144v-36zM0 444l216-156h48L8 480H0v-36zM0 36l216 156h-48L0 72V36z"/><path fill="#FFF" d="M240 0h160v480H240zM0 160h640v160H0z"/><path fill="#C8102E" d="M280 0h80v480h-80zM0 200h640v80H0z"/></svg>
+                </button>
+                <button class="lang-btn" data-lang="it" title="Italiano">
+                    <svg viewBox="0 0 640 480"><g fill-rule="evenodd" stroke-width="1pt"><path fill="#fff" d="M0 0h640v480H0z"/><path fill="#009246" d="M0 0h213.3v480H0z"/><path fill="#ce2b37" d="M426.7 0H640v480H426.7z"/></g></svg>
+                </button>
+            </div>
+        </div>
+        <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="recipe-search" placeholder="Пошук рецепту за назвою...">
+        </div>
+    </header>
+
+    <main class="view-container">
+        <section id="view-home" class="view-section active">
+            <div class="glass-card">
+                <h2 class="section-title">🧺 <span id="i18n-fridge-title">Що у вас є?</span></h2>
+                <textarea id="fridge-input" class="fridge-input" placeholder="Введіть продукти через кому або пробіл: картопля, яйця, молоко, цибуля..."></textarea>
+                <button class="btn-primary" id="btn-find-recipes">
+                    <span>🔍</span> <span id="i18n-find-btn">Підібрати рецепти</span>
+                </button>
+            </div>
+
+            <h2 class="section-title">📂 <span id="i18n-categories">Категорії</span></h2>
+            <div class="categories-grid">
+                <div class="category-card" data-cat="soups">
+                    <span class="emoji">🍲</span>
+                    <span class="label" id="i18n-cat-soups">Супи</span>
+                </div>
+                <div class="category-card" data-cat="main">
+                    <span class="emoji">🥘</span>
+                    <span class="label" id="i18n-cat-main">Другі страви</span>
+                </div>
+                <div class="category-card" data-cat="salads">
+                    <span class="emoji">🥗</span>
+                    <span class="label" id="i18n-cat-salads">Салати</span>
+                </div>
+                <div class="category-card" data-cat="desserts">
+                    <span class="emoji">🍰</span>
+                    <span class="label" id="i18n-cat-desserts">Десерти</span>
+                </div>
+                <div class="category-card" data-cat="baking">
+                    <span class="emoji">🥟</span>
+                    <span class="label" id="i18n-cat-baking">Випічка</span>
+                </div>
+                <div class="category-card" data-cat="all">
+                    <span class="emoji">📖</span>
+                    <span class="label" id="i18n-cat-all">Всі страви</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-results" class="view-section">
+            <div class="filter-chips">
+                <button class="chip active" data-cat="all" id="i18n-chip-all">Всі</button>
+                <button class="chip" data-cat="soups" id="i18n-chip-soups">🍲 Супи</button>
+                <button class="chip" data-cat="main" id="i18n-chip-main">🥘 Другі</button>
+                <button class="chip" data-cat="salads" id="i18n-chip-salads">🥗 Салати</button>
+                <button class="chip" data-cat="desserts" id="i18n-chip-desserts">🍰 Десерти</button>
+                <button class="chip" data-cat="baking" id="i18n-chip-baking">🥟 Випічка</button>
+            </div>
+            <div id="results-content"></div>
+        </section>
+
+        <section id="view-detail" class="view-section">
+            <button class="btn-back" id="btn-back">← <span id="i18n-back-btn">Назад</span></button>
+            <div id="recipe-detail-content"></div>
+        </section>
+
+        <section id="view-favorites" class="view-section">
+            <h2 class="section-title">⭐ <span id="i18n-fav-title">Обрані рецепти</span></h2>
+            <div id="favorites-content"></div>
+        </section>
+
+        <section id="view-cart" class="view-section">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <h2 class="section-title" style="margin-bottom:0">📋 <span id="i18n-cart-title">Список покупок</span></h2>
+                <button id="btn-clear-cart" style="background:none; border:none; color:var(--danger); font-size:0.8rem; font-weight:700; cursor:pointer;">Очистити</button>
+            </div>
+            <div id="cart-content"></div>
+        </section>
+
+        <section id="view-settings" class="view-section">
+            <h2 class="section-title">⚙️ <span id="i18n-settings-title">Налаштування</span></h2>
+            
+            <div class="glass-card">
+                <h3 style="font-size:0.95rem; margin-bottom:10px; color:var(--primary-dark);">Джерела рецептів</h3>
+                <label style="display:flex; gap:8px; font-size:0.85rem; margin-bottom:8px; cursor:pointer;">
+                    <input type="checkbox" id="src-dotsyak" checked> «Українська кухня» В.С. Доцяк
+                </label>
+                <label style="display:flex; gap:8px; font-size:0.85rem; cursor:pointer;">
+                    <input type="checkbox" id="src-ussr" checked> «Збірник рецептур» Громадхарч
+                </label>
+            </div>
+
+            <div class="glass-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <h3 style="font-size:0.95rem; color:var(--primary-dark); margin:0;">Базові продукти (ігноруються)</h3>
+                    <button id="btn-reset-basics" style="background:none; border:none; color:var(--primary); font-size:0.75rem; font-weight:700; cursor:pointer;">Скинути</button>
+                </div>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">Ці продукти вважаються наявними за замовчуванням і не блокують рецепт при підборі.</p>
+                
+                <div style="display:flex; gap:8px; margin-bottom:14px;">
+                    <input type="text" id="new-basic-input" placeholder="Додати продукт (напр. сметана)..." style="flex:1; padding:8px 12px; border-radius:10px; border:1px solid var(--border); font-size:0.85rem; outline:none;">
+                    <button id="btn-add-basic" style="padding:8px 14px; background:var(--primary); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:0.85rem; cursor:pointer;">+ Додати</button>
+                </div>
+
+                <div id="basic-ingredients-list" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
+            </div>
+
+            <div class="glass-card" style="text-align:center; padding:16px;">
+                <p style="font-size:0.85rem; font-weight:700; color:var(--primary-dark); margin-bottom:4px;">Розробник: SIL</p>
+                <p style="font-size:0.75rem; color:var(--text-muted);">Дата створення: Серпень 2026</p>
+            </div>
+        </section>
+    </main>
+
+    <nav class="bottom-nav">
+        <button class="nav-btn active" data-target="view-home">
+            <span class="icon">🏠</span>
+            <span class="label" id="i18n-nav-home">Головна</span>
+        </button>
+        <button class="nav-btn" data-target="view-results">
+            <span class="icon">🔍</span>
+            <span class="label" id="i18n-nav-match">Підбір</span>
+        </button>
+        <button class="nav-btn" data-target="view-favorites">
+            <span class="icon">⭐</span>
+            <span class="label" id="i18n-nav-favs">Обране</span>
+        </button>
+        <button class="nav-btn" data-target="view-cart">
+            <span class="icon">📋</span>
+            <span class="label" id="i18n-nav-cart">Список</span>
+            <span class="cart-count" id="cart-badge" style="display:none">0</span>
+        </button>
+        <button class="nav-btn" data-target="view-settings">
+            <span class="icon">⚙️</span>
+            <span class="label" id="i18n-nav-opt">Опції</span>
+        </button>
+    </nav>
+</div>
+
+<script>
+const i18n = {
+    uk: {
+        title: "Що приготувати?",
+        search: "Пошук рецепту за назвою...",
+        fridgeTitle: "Що у вас є?",
+        fridgePlaceholder: "Введіть продукти через кому або пробіл: картопля, яйця, молоко, цибуля...",
+        findBtn: "Підібрати рецепти",
+        categories: "Категорії",
+        soups: "Супи",
+        main: "Другі страви",
+        salads: "Салати",
+        desserts: "Десерти",
+        baking: "Випічка",
+        all: "Всі страви",
+        navHome: "Головна",
+        navMatch: "Підбір",
+        navFavs: "Обране",
+        navCart: "Список",
+        navOpt: "Опції",
+        back: "Назад",
+        favTitle: "Обрані рецепти",
+        cartTitle: "Список покупок",
+        clearCart: "Очистити",
+        emptyCart: "Список покупок порожній",
+        emptyFavs: "Немає збережених рецептів",
+        settingsTitle: "Налаштування",
+        readyHeader: "Можна готувати",
+        allHaveBadge: "100% Все є",
+        missingBadgePrefix: "Не вистачає: ",
+        missingPrefix: "Докупити: ",
+        needMorePrompt: "💡 Додайте ситні продукти (наприклад: яйця, картоплю, борошно), щоб відкрити рецепти."
+    },
+    en: {
+        title: "What to Cook?",
+        search: "Search recipes by name...",
+        fridgeTitle: "What's in your fridge?",
+        fridgePlaceholder: "Enter items with comma or space: potato, eggs, milk, onion...",
+        findBtn: "Find Recipes",
+        categories: "Categories",
+        soups: "Soups",
+        main: "Mains",
+        salads: "Salads",
+        desserts: "Desserts",
+        baking: "Baking",
+        all: "All Meals",
+        navHome: "Home",
+        navMatch: "Match",
+        navFavs: "Saved",
+        navCart: "Cart",
+        navOpt: "Options",
+        back: "Back",
+        favTitle: "Saved Recipes",
+        cartTitle: "Shopping List",
+        clearCart: "Clear",
+        emptyCart: "Shopping list is empty",
+        emptyFavs: "No saved recipes",
+        settingsTitle: "Settings",
+        readyHeader: "Ready to cook",
+        allHaveBadge: "100% Complete",
+        missingBadgePrefix: "Missing: ",
+        missingPrefix: "Buy: ",
+        needMorePrompt: "💡 Add staple ingredients (e.g. eggs, potatoes, flour) to unlock dishes."
+    },
+    it: {
+        title: "Cosa Cucinare?",
+        search: "Cerca ricette per nome...",
+        fridgeTitle: "Cosa c'è in frigo?",
+        fridgePlaceholder: "Inserisci ingredienti con virgola o spazio: patate, uova, latte, cipolla...",
+        findBtn: "Trova Ricette",
+        categories: "Categorie",
+        soups: "Zuppe",
+        main: "Secondi",
+        salads: "Insalate",
+        desserts: "Dolci",
+        baking: "Lievitati",
+        all: "Tutti i piatti",
+        navHome: "Home",
+        navMatch: "Ricette",
+        navFavs: "Preferiti",
+        navCart: "Spesa",
+        navOpt: "Opzioni",
+        back: "Indietro",
+        favTitle: "Ricette Preferite",
+        cartTitle: "Lista della Spesa",
+        clearCart: "Svuota",
+        emptyCart: "La lista della spesa è vuota",
+        emptyFavs: "Nessuna ricetta salvata",
+        settingsTitle: "Impostazioni",
+        readyHeader: "Pronto da cuocere",
+        allHaveBadge: "100% Completo",
+        missingBadgePrefix: "Manca: ",
+        missingPrefix: "Comprare: ",
+        needMorePrompt: "💡 Aggiungi ingredienti base (es. uova, patate, farina) per sbloccare le ricette."
+    }
+};
+
+let currentLang = 'uk';
+
+const recipes = [
+    {
+        id: 1, name: "Борщ український з яловичиною", category: "soups", categoryEmoji: "🍲",
+        servings: "2 великі порції",
+        ingredients: [
+            { name: "буряк", amount: "200г", stems: ["буряк", "свекл", "beet"] },
+            { name: "капуста", amount: "150г", stems: ["капуст", "cabbag"] },
+            { name: "картопля", amount: "300г", stems: ["картоп", "картош", "potat"] },
+            { name: "яловичина", amount: "400г", stems: ["ялович", "говяд", "beef"] },
+            { name: "морква", amount: "100г", stems: ["моркв", "морков", "carrot"] },
+            { name: "цибуля", amount: "100г", stems: ["цибул", "лук", "onion"] },
+            { name: "томатна паста", amount: "50г", stems: ["томат", "помідор", "помидор"] }
+        ],
+        instructions: "1. М'ясо залийте холодною водою у каструлі, доведіть до кипіння, зніміть шумовинням сіру пінку. Зменшіть вогонь до мінімуму і варіть під кришкою близько 1.5 години, поки яловичина не стане м'якою.\n2. Буряк натріть або наріжте тонкою соломкою. Викладіть на сковороду з ложкою олії, томатною пастою, дрібкою цукру, 1 ч. л. оцту та 4-5 ложками бульйону з каструлі. Тушкуйте на повільному вогні під кришкою хвилин 20–25.\n3. На іншій сковороді підсмажте нарізану цибулю та натерту моркву до приємного золотистого кольору (5-7 хвилин).\n4. У каструлю до м'яса всипте картоплю кубиками. Через 10 хвилин додайте нашатковану капусту і варіть ще 7-10 хвилин.\n5. Перекладіть у каструлю тушкований буряк та зажарку з моркви й цибулі. Посоліть, поперчіть, додайте лавровий лист і варіть на самому тихому вогні 5 хвилин.\n6. Вимкніть плиту, додайте 2 зубчики подрібненого часнику, накрийте кришкою і обов'язково дайте борщу постояти 15-20 хвилин перед тим, як наливати в тарілки.",
+        tips: [
+            "Не кип'ятіть борщ бурхливо після додавання буряка — на сильному вогні він швидко втрачає свій гарний рубіновий колір і стає рудим.",
+            "Кислота (оцет або томат) потрібна саме в буряк під час тушкування, а не в каструлю — вона збереже колір, але якщо додати її в сиру картоплю, та залишиться твердою."
+        ],
+        cookTime: "120 хв", source: "Доцяк"
+    },
+    {
+        id: 2, name: "Омлет класичний з молоком", category: "main", categoryEmoji: "🍳",
+        servings: "1 порція",
+        ingredients: [
+            { name: "яйця", amount: "3 шт", stems: ["яйц", "яйч", "egg"] },
+            { name: "молоко", amount: "100мл", stems: ["молок", "milk"] }
+        ],
+        instructions: "1. У глибоку миску розбийте яйця, влийте молоко і додайте дрібку солі.\n2. Звичайною виделкою або вінчиком просто добре розмішайте все до однорідного стану (збивати міксером у густу піну не потрібно).\n3. Добре розігрійте сковороду на середньому вогні та розтопіть шматочок вершкового масла.\n4. Вилийте яєчну суміш. Як тільки краї почнуть схоплюватися, лопаткою акуратно підсувайте їх від країв до середини, щоб сира маса зверху стікала на гаряче дно.\n5. Коли омлет зверху стане кремовим і ніжним, але вже не буде рідким, складіть його навпіл або скрутіть лопаткою і перекладіть на тарілку.",
+        tips: [
+            "Якщо збивати яйця міксером у пишну піну, омлет на сковороді спочатку сильно підніметься, а потім одразу впаде і стане гумовим на смак.",
+            "Не тримайте омлет на сковороді занадто довго — знімайте, поки серединка ще м'яка й волога, від власного тепла він сам дійде на тарілці."
+        ],
+        cookTime: "10 хв", source: "Громадхарч"
+    },
+    {
+        id: 3, name: "Картопляне пюре домашнє", category: "main", categoryEmoji: "🥘",
+        servings: "3–4 порції",
+        ingredients: [
+            { name: "картопля", amount: "1кг", stems: ["картоп", "картош", "potat"] },
+            { name: "молоко", amount: "200мл", stems: ["молок", "milk"] }
+        ],
+        instructions: "1. Картоплю очистіть, наріжте однаковими шматочками, щоб вона зварилася одночасно, залийте водою і додайте 1 ч. л. солі.\n2. Варіть після закипання на помірному вогні близько 20–25 хвилин (шматочки мають легко проколюватися ножем).\n3. Злийте всю воду до останньої краплі, поверніть каструлю на вимкнену теплу конфорку на 1 хвилину, щоб залишки вологи випарувалися.\n4. Окремо у чашці або ківшику підігрійте молоко до гарячого стану разом зі шматочком масла.\n5. Звичайною товкачкою ретельно розімніть гарячу картоплю, поступово підливаючи гаряче молоко з маслом, поки пюре не стане м'яким і повітряним.",
+        tips: [
+            "Ніколи не збивайте пюре заглибним блендером — картопля миттєво перетвориться на липкий тягучий клейстер.",
+            "Не лийте в картоплю холодне молоко з холодильника — пюре від цього миттєво посіріє і втратить смак."
+        ],
+        cookTime: "30 хв", source: "Громадхарч"
+    },
+    {
+        id: 4, name: "Котлети домашні м'ясні", category: "main", categoryEmoji: "🥩",
+        servings: "4 порції (8–10 котлет)",
+        ingredients: [
+            { name: "свинина", amount: "300г", stems: ["свинин", "pork"] },
+            { name: "яловичина", amount: "300г", stems: ["ялович", "говяд", "beef"] },
+            { name: "хліб", amount: "100г", stems: ["хліб", "хлеб", "батон", "bread"] },
+            { name: "молоко", amount: "100мл", stems: ["молок", "milk"] },
+            { name: "цибуля", amount: "1 шт", stems: ["цибул", "лук", "onion"] }
+        ],
+        instructions: "1. З батона зріжте скоринки, м'якуш залийте молоком або водою на 5 хвилин, потім злегка відіжміть руками.\n2. М'ясо та цибулю пропустіть через м'ясорубку разом із розмоченим хлібом.\n3. Додайте сіль, чорний перець. Добре вимісіть фарш руками і кілька разів підніміть та киньте назад у миску (це зробить котлети щільними і соковитими, вони не розваляться при смаженні).\n4. Змоченими у воді руками зліпіть невеликі овальні котлети, за бажанням обкачайте їх у борошні або панірувальних сухарях.\n5. Розігрійте сковороду з олією, викладіть котлети і смажте на середньому вогні приблизно по 4-5 хвилин з кожного боку до рум'яної скоринки. Наприкінці накрийте кришкою на 2-3 хвилини.",
+        tips: [
+            "Хліб у котлетах потрібен не для економії, а для утримання соку всередині. Без нього котлети вийдуть сухими та жорсткими.",
+            "Не кладіть котлети на ледь теплу сковороду — сік витече, скоринка не схопиться, і вони будуть тушкуватися у власному соку, а не смажитися."
+        ],
+        cookTime: "30 хв", source: "Громадхарч"
+    },
+    {
+        id: 5, name: "Сирники домашні", category: "desserts", categoryEmoji: "🥞",
+        servings: "2–3 порції (5–6 шт)",
+        ingredients: [
+            { name: "сир кисломолочний", amount: "500г", stems: ["сир", "творог", "chees"] },
+            { name: "яйця", amount: "1-2 шт", stems: ["яйц", "яйч", "egg"] },
+            { name: "борошно", amount: "100г", stems: ["борошн", "мук", "flour"] }
+        ],
+        instructions: "1. Якщо сир вологий — обов'язково відіжміть його через марлю або сито. Розімніть сир виделкою у мисці.\n2. Додайте яйце, 2 столові ложки цукру, дрібку солі та 2-3 столові ложки борошна (решта борошна піде на обкачування). Добре перемішайте.\n3. Присипте стіл борошном, візьміть ложкою сирну масу, сформуйте кульку, приплюсніть її у шайбочку завтовшки 1.5–2 см і підрівняйте боки ножем або склянкою.\n4. Нагрійте сковороду з 1-2 ложками олії на вогні трохи нижче середнього.\n5. Смажте сирники по 3–4 хвилини з кожного боку до золотистого кольору. Подавайте зі сметаною, медом або варенням.",
+        tips: [
+            "Якщо сир мокрий і ви замість віджимання просто додасте більше борошна — отримаєте тверді гумові сирники зі смаком вареного тіста.",
+            "Не сипте занадто багато цукру в сир — від цукру сир «попливе» і стане рідким на сковороді, а скоринка почне горіти раніше, ніж сирник пропечеться."
+        ],
+        cookTime: "25 хв", source: "Доцяк"
+    },
+    {
+        id: 6, name: "Вареники з картоплею", category: "baking", categoryEmoji: "🥟",
+        servings: "3–4 порції",
+        ingredients: [
+            { name: "борошно", amount: "500г", stems: ["борошн", "мук", "flour"] },
+            { name: "яйця", amount: "1 шт", stems: ["яйц", "яйч", "egg"] },
+            { name: "картопля", amount: "500г", stems: ["картоп", "картош", "potat"] },
+            { name: "цибуля", amount: "2 шт", stems: ["цибул", "лук", "onion"] }
+        ],
+        instructions: "1. Картоплю відваріть і потовчіть у сухе пюре. Цибулю дрібно наріжте та підсмажте на олії до золотистого кольору. Змішайте картоплю з половиною смаженої цибулі, посоліть, поперчіть і дайте начинці **повністю охолонути**.\n2. У миску просійте борошно, зробіть ямку, вбийте яйце, додайте пів чайної ложки солі та склянку холодної води. Замісіть м'яке тісто, яке не липне до рук.\n3. Загорніть тісто в плівку або накрийте рушником і залиште полежати на столі на 20-30 хвилин.\n4. Тонко розкачайте тісто (близько 2 мм), склянкою виріжте кружальця, покладіть по чайній ложці картоплі й міцно зліпіть краї пальцями.\n5. Закип'ятіть у великій каструлі воду з сіллю, опустіть вареники. Після того як вони спливуть, варіть ще 4-5 хвилин на помірному вогні. Витягніть шумівкою і змішайте з рештою смаженої цибулі.",
+        tips: [
+            "Ніколи не ліпіть вареники з теплою або гарячою начинкою — тісто миттєво розпариться, стане слизьким і розлізеться прямо у воді.",
+            "Обов'язково дайте замішаному тісту постояти 20-30 хвилин перед розкачуванням — воно стане еластичним і не буде стягуватися назад при качанні."
+        ],
+        cookTime: "50 хв", source: "Доцяк"
+    },
+    {
+        id: 7, name: "Яєчня з помідорами та цибулею", category: "main", categoryEmoji: "🍳",
+        servings: "1–2 порції",
+        ingredients: [
+            { name: "яйця", amount: "3 шт", stems: ["яйц", "яйч", "egg"] },
+            { name: "помідори", amount: "2 шт", stems: ["помідор", "томат", "помидор"] },
+            { name: "цибуля", amount: "1 шт", stems: ["цибул", "лук", "onion"] }
+        ],
+        instructions: "1. Цибулю наріжте дрібними кубиками або півкільцями. Викладіть на сковороду з розігрітою олією і смажте на середньому вогні 3-4 хвилини до м'якості.\n2. Помідори наріжте середніми шматочками, додайте до цибулі, посоліть і тушкуйте 2–3 хвилини, щоб випарувався зайвий сік.\n3. Лопаткою зробіть невеликі заглиблення серед овочів і обережно вбийте туди яйця, намагаючись не пошкодити жовтки.\n4. Посоліть білки, зменшіть вогонь до мінімуму і готуйте 4–5 хвилин (можна накрити кришкою на останні 2 хвилини, якщо любите повністю пропечений білок).",
+        tips: [
+            "Дайте помідорам трохи обсмажитися і втратити воду перед тим, як вбивати яйця, інакше яйця варитимуться в рідкій кислій юшці.",
+            "Не сипте сіль на сам жовток — від солі на ньому з'являються білі плями і він втрачає гарний вигляд."
+        ],
+        cookTime: "10 хв", source: "Доцяк"
+    }
+];
+
+const defaultBasics = ["сіль", "перець", "олія", "масло", "цукор", "вода", "оцет", "часник", "лавровий лист"];
+
+let userBasics = JSON.parse(localStorage.getItem('userBasics')) || [...defaultBasics];
+let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let currentCategory = 'all';
+let userTokens = [];
+
+function getStem(word) {
+    return word.toLowerCase().trim()
+        .replace(/(ою|ею|ям|ем|ам|ів|ей|ами|ями|их|их|ого|ему|ому|і|и|а|я|у|ю|е|є|о)$/g, '');
+}
+
+function hasIngredient(recipeIng) {
+    return recipeIng.stems.some(stem => 
+        userTokens.some(uToken => uToken.startsWith(stem) || stem.startsWith(uToken))
+    );
+}
+
+function calculateMatching(recipe) {
+    const mainIngs = recipe.ingredients.filter(ing => 
+        !userBasics.some(b => ing.name.toLowerCase().includes(b.toLowerCase()))
+    );
+
+    let matched = 0;
+    let missing = [];
+
+    mainIngs.forEach(ing => {
+        if (hasIngredient(ing)) {
+            matched++;
+        } else {
+            missing.push(ing.name);
+        }
+    });
+
+    return {
+        recipe,
+        totalMain: mainIngs.length,
+        missingCount: missing.length,
+        missingIngredients: missing
+    };
+}
+
+function navigateTo(viewId) {
+    document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+    const targetView = document.getElementById(viewId);
+    if (targetView) targetView.classList.add('active');
+
+    const navBtn = document.querySelector(`.nav-btn[data-target="${viewId}"]`);
+    if (navBtn) navBtn.classList.add('active');
+
+    if (viewId === 'view-cart') renderCart();
+    if (viewId === 'view-favorites') renderFavorites();
+    if (viewId === 'view-settings') renderSettings();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderResults() {
+    const container = document.getElementById('results-content');
+    container.innerHTML = '';
+
+    const srcDotsyak = document.getElementById('src-dotsyak').checked;
+    const srcUssr = document.getElementById('src-ussr').checked;
+
+    let pool = recipes.filter(r => {
+        if (r.source === 'Доцяк' && !srcDotsyak) return false;
+        if (r.source === 'Громадхарч' && !srcUssr) return false;
+        if (currentCategory !== 'all' && r.category !== currentCategory) return false;
+        return true;
+    });
+
+    const evaluated = pool.map(r => calculateMatching(r))
+                          .filter(res => {
+                              if (res.totalMain <= 4) return res.missingCount <= 1;
+                              return res.missingCount <= 2;
+                          });
+
+    if (evaluated.length === 0) {
+        container.innerHTML = `
+            <div class="glass-card" style="text-align:center; padding:30px 20px;">
+                <span style="font-size:3rem; display:block; margin-bottom:10px;">🥣</span>
+                <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.5;">${i18n[currentLang].needMorePrompt}</p>
+            </div>
+        `;
+        return;
+    }
+
+    const ready = evaluated.filter(e => e.missingCount === 0)
+                           .sort((a, b) => a.totalMain - b.totalMain);
+
+    const missing = evaluated.filter(e => e.missingCount > 0);
+
+    let html = '';
+
+    if (ready.length > 0) {
+        html += `<h3 style="font-size:0.9rem; color:var(--primary-dark); margin: 0 0 10px;">✅ ${i18n[currentLang].readyHeader} (${ready.length})</h3>`;
+        ready.forEach(item => {
+            html += createRecipeCardHTML(item.recipe, 'ready', []);
+        });
+    }
+
+    if (missing.length > 0) {
+        const groups = {};
+        missing.forEach(item => {
+            const missKey = item.missingIngredients.join(', ');
+            if (!groups[missKey]) groups[missKey] = [];
+            groups[missKey].push(item.recipe);
+        });
+
+        for (const [productStr, groupRecipes] of Object.entries(groups)) {
+            const firstProduct = productStr.split(',')[0].trim();
+            html += `
+                <div class="missing-group-title">
+                    <span>${i18n[currentLang].missingPrefix}${productStr} (${groupRecipes.length})</span>
+                    <button class="btn-add-cart" onclick="addToCart('${firstProduct}')">+ В список</button>
+                </div>
+            `;
+            groupRecipes.forEach(r => {
+                html += createRecipeCardHTML(r, 'missing', [productStr]);
+            });
+        }
+    }
+
+    container.innerHTML = html;
+}
+
+function createRecipeCardHTML(r, status, missingList) {
+    const isFav = favorites.includes(r.id);
+    return `
+        <div class="recipe-card" onclick="showRecipeDetail(${r.id})">
+            <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${r.id})">⭐</button>
+            <div class="recipe-card-header">
+                <span class="recipe-card-emoji">${r.categoryEmoji}</span>
+                <div class="recipe-card-info">
+                    <div class="recipe-card-title">${r.name}</div>
+                    <div class="recipe-card-meta">
+                        <span>⏱️ ${r.cookTime}</span>
+                        <span>👥 ${r.servings || '1–2 порції'}</span>
+                        <span>📖 ${r.source}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="recipe-card-ing-list">
+                ${r.ingredients.map(i => i.name).join(', ')}
+            </div>
+            <div>
+                ${status === 'ready' 
+                    ? `<span class="badge badge-ready">${i18n[currentLang].allHaveBadge}</span>` 
+                    : `<span class="badge badge-missing">${i18n[currentLang].missingBadgePrefix}${missingList.join(', ')}</span>`
+                }
+            </div>
+        </div>
+    `;
+}
+
+function showRecipeDetail(id) {
+    const r = recipes.find(item => item.id === id);
+    if (!r) return;
+
+    const container = document.getElementById('recipe-detail-content');
+
+    let tipsHTML = '';
+    if (r.tips && r.tips.length > 0) {
+        tipsHTML = `
+            <div class="tips-card">
+                <h3 class="tips-title">⚠️ Технологічні секрети та критичні помилки:</h3>
+                <ul class="tips-list">
+                    ${r.tips.map(t => `<li>${t}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+    }
+
+    container.innerHTML = `
+        <div class="detail-header-card">
+            <div style="font-size:2.5rem; margin-bottom:8px;">${r.categoryEmoji}</div>
+            <h2 class="detail-title">${r.name}</h2>
+            <div style="display:flex; flex-wrap:wrap; gap:10px; font-size:0.8rem; color:var(--text-muted);">
+                <span>⏱️ ${r.cookTime}</span>
+                <span>👥 ${r.servings || '1–2 порції'}</span>
+                <span>📖 Джерело: ${r.source}</span>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h3 style="font-size:0.95rem; margin-bottom:10px; color:var(--primary-dark)">🥕 Інгредієнти (раскладка на ${r.servings || 'порцію'}):</h3>
+            <ul class="ingredients-list">
+                ${r.ingredients.map(ing => {
+                    const isBasic = userBasics.some(b => ing.name.toLowerCase().includes(b.toLowerCase()));
+                    const have = hasIngredient(ing);
+                    let cls = isBasic ? '' : (have ? 'have' : 'need');
+                    let statusLabel = isBasic ? 'Базове' : (have ? '✅ Є' : '❌ Треба');
+                    return `
+                        <li class="ing-item ${cls}">
+                            <span>${ing.name} <small style="color:var(--text-muted)">(${ing.amount})</small></span>
+                            <span style="font-weight:700; font-size:0.75rem;">${statusLabel}</span>
+                        </li>
+                    `;
+                }).join('')}
+            </ul>
+        </div>
+
+        <div class="glass-card">
+            <h3 style="font-size:0.95rem; margin-bottom:10px; color:var(--primary-dark)">👨‍🍳 Покрокова технологія приготування:</h3>
+            <ol class="recipe-steps">
+                ${r.instructions.split('\n').map(step => `<li>${step.replace(/^\d+\.\s*/, '')}</li>`).join('')}
+            </ol>
+        </div>
+
+        ${tipsHTML}
+    `;
+
+    navigateTo('view-detail');
+}
+
+function addToCart(product) {
+    if (!cart.includes(product)) {
+        cart.push(product);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartBadge();
+    }
+}
+
+function renderCart() {
+    const container = document.getElementById('cart-content');
+    if (cart.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:30px;">${i18n[currentLang].emptyCart}</p>`;
+        return;
+    }
+
+    container.innerHTML = cart.map((item, idx) => `
+        <div class="glass-card" style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; margin-bottom:8px;">
+            <span style="font-weight:600; font-size:0.9rem;">🛒 ${item}</span>
+            <button onclick="removeFromCart(${idx})" style="background:none; border:none; color:var(--danger); font-size:1.1rem; cursor:pointer;">✕</button>
+        </div>
+    `).join('');
+}
+
+function removeFromCart(idx) {
+    cart.splice(idx, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartBadge();
+    renderCart();
+}
+
+function updateCartBadge() {
+    const b = document.getElementById('cart-badge');
+    if (cart.length > 0) {
+        b.textContent = cart.length;
+        b.style.display = 'block';
+    } else {
+        b.style.display = 'none';
+    }
+}
+
+function toggleFav(e, id) {
+    e.stopPropagation();
+    if (favorites.includes(id)) {
+        favorites = favorites.filter(favId => favId !== id);
+    } else {
+        favorites.push(id);
+    }
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    renderResults();
+    if (document.getElementById('view-favorites').classList.contains('active')) {
+        renderFavorites();
+    }
+}
+
+function renderFavorites() {
+    const container = document.getElementById('favorites-content');
+    const favRecipes = recipes.filter(r => favorites.includes(r.id));
+
+    if (favRecipes.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:30px;">${i18n[currentLang].emptyFavs}</p>`;
+        return;
+    }
+
+    container.innerHTML = favRecipes.map(r => {
+        const m = calculateMatching(r);
+        const status = m.missingCount === 0 ? 'ready' : 'missing';
+        return createRecipeCardHTML(r, status, m.missingIngredients);
+    }).join('');
+}
+
+function renderSettings() {
+    const container = document.getElementById('basic-ingredients-list');
+    container.innerHTML = userBasics.map((b, idx) => `
+        <span style="background:var(--card-tint); border:1.5px solid var(--border); padding:5px 10px; border-radius:12px; font-size:0.8rem; display:inline-flex; align-items:center; gap:6px; font-weight:600;">
+            ${b}
+            <button onclick="removeBasicIngredient(${idx})" style="background:none; border:none; color:var(--danger); cursor:pointer; font-weight:700; font-size:0.9rem; line-height:1;">✕</button>
+        </span>
+    `).join('');
+}
+
+function addBasicIngredient() {
+    const input = document.getElementById('new-basic-input');
+    const val = input.value.trim().toLowerCase();
+    if (val && !userBasics.includes(val)) {
+        userBasics.push(val);
+        localStorage.setItem('userBasics', JSON.stringify(userBasics));
+        input.value = '';
+        renderSettings();
+    }
+}
+
+function removeBasicIngredient(idx) {
+    userBasics.splice(idx, 1);
+    localStorage.setItem('userBasics', JSON.stringify(userBasics));
+    renderSettings();
+}
+
+function resetBasicIngredients() {
+    userBasics = [...defaultBasics];
+    localStorage.setItem('userBasics', JSON.stringify(userBasics));
+    renderSettings();
+}
+
+function setLanguage(lang) {
+    currentLang = lang;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    
+    document.getElementById('i18n-title').textContent = i18n[lang].title;
+    document.getElementById('recipe-search').placeholder = i18n[lang].search;
+    document.getElementById('i18n-fridge-title').textContent = i18n[lang].fridgeTitle;
+    document.getElementById('fridge-input').placeholder = i18n[lang].fridgePlaceholder;
+    document.getElementById('i18n-find-btn').textContent = i18n[lang].findBtn;
+    document.getElementById('i18n-categories').textContent = i18n[lang].categories;
+    document.getElementById('i18n-cat-soups').textContent = i18n[lang].soups;
+    document.getElementById('i18n-cat-main').textContent = i18n[lang].main;
+    document.getElementById('i18n-cat-salads').textContent = i18n[lang].salads;
+    document.getElementById('i18n-cat-desserts').textContent = i18n[lang].desserts;
+    document.getElementById('i18n-cat-baking').textContent = i18n[lang].baking;
+    document.getElementById('i18n-cat-all').textContent = i18n[lang].all;
+
+    document.getElementById('i18n-nav-home').textContent = i18n[lang].navHome;
+    document.getElementById('i18n-nav-match').textContent = i18n[lang].navMatch;
+    document.getElementById('i18n-nav-favs').textContent = i18n[lang].navFavs;
+    document.getElementById('i18n-nav-cart').textContent = i18n[lang].navCart;
+    document.getElementById('i18n-nav-opt').textContent = i18n[lang].navOpt;
+
+    document.getElementById('i18n-back-btn').textContent = i18n[lang].back;
+    document.getElementById('i18n-fav-title').textContent = i18n[lang].favTitle;
+    document.getElementById('i18n-cart-title').textContent = i18n[lang].cartTitle;
+    document.getElementById('btn-clear-cart').textContent = i18n[lang].clearCart;
+    document.getElementById('i18n-settings-title').textContent = i18n[lang].settingsTitle;
+
+    document.getElementById('i18n-chip-all').textContent = i18n[lang].all;
+    document.getElementById('i18n-chip-soups').textContent = `🍲 ${i18n[lang].soups}`;
+    document.getElementById('i18n-chip-main').textContent = `🥘 ${i18n[lang].main}`;
+    document.getElementById('i18n-chip-salads').textContent = `🥗 ${i18n[lang].salads}`;
+    document.getElementById('i18n-chip-desserts').textContent = `🍰 ${i18n[lang].desserts}`;
+    document.getElementById('i18n-chip-baking').textContent = `🥟 ${i18n[lang].baking}`;
+
+    if (document.getElementById('view-results').classList.contains('active')) {
+        renderResults();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    updateCartBadge();
+
+    document.getElementById('header-logo-btn').addEventListener('click', () => {
+        navigateTo('view-home');
+    });
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => navigateTo(btn.dataset.target));
+    });
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+    });
+
+    document.getElementById('btn-add-basic').addEventListener('click', addBasicIngredient);
+    document.getElementById('new-basic-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') addBasicIngredient();
+    });
+    document.getElementById('btn-reset-basics').addEventListener('click', resetBasicIngredients);
+
+    document.getElementById('btn-find-recipes').addEventListener('click', () => {
+        const text = document.getElementById('fridge-input').value.trim();
+        userTokens = text.split(/[,\n\s]+/).map(w => getStem(w)).filter(w => w.length > 1);
+        navigateTo('view-results');
+        renderResults();
+    });
+
+    document.querySelectorAll('.category-card').forEach(card => {
+        card.addEventListener('click', () => {
+            currentCategory = card.dataset.cat;
+            document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.cat === currentCategory));
+            navigateTo('view-results');
+            renderResults();
+        });
+    });
+
+    document.querySelectorAll('.chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            currentCategory = chip.dataset.cat;
+            document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.cat === currentCategory));
+            renderResults();
+        });
+    });
+
+    document.getElementById('recipe-search').addEventListener('input', (e) => {
+        const q = e.target.value.toLowerCase().trim();
+        if (!q) return;
+
+        const found = recipes.filter(r => r.name.toLowerCase().includes(q));
+        const container = document.getElementById('results-content');
+        navigateTo('view-results');
+        
+        if (found.length === 0) {
+            container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:30px;">Нічого не знайдено за назвою "${q}"</p>`;
+            return;
+        }
+
+        container.innerHTML = found.map(r => {
+            const m = calculateMatching(r);
+            const status = m.missingCount === 0 ? 'ready' : 'missing';
+            return createRecipeCardHTML(r, status, m.missingIngredients);
+        }).join('');
+    });
+
+    document.getElementById('btn-back').addEventListener('click', () => {
+        navigateTo('view-results');
+    });
+
+    document.getElementById('btn-clear-cart').addEventListener('click', () => {
+        cart = [];
+        localStorage.removeItem('cart');
+        updateCartBadge();
+        renderCart();
+    });
+});
+</script>
+</body>
+</html>
