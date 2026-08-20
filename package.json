@@ -1,9 +1,9 @@
 {
   "name": "what-to-cook",
   "version": "1.0.0",
-  "description": "Culinary Smart Match App",
+  "description": "Culinary Smart Match Mobile App",
   "scripts": {
-    "build": "echo 'No build step required'"
+    "build": "echo 'Build complete'"
   },
   "dependencies": {
     "@capacitor/android": "^6.1.2",
