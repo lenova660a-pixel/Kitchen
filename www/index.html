@@ -53,12 +53,8 @@ body {
     position: relative;
 }
 
-/* Splash Screen */
-<div id="splash-screen">
-    <img src="icon.png" alt="App Logo" class="splash-icon">
-    <div class="splash-title">Що приготувати?</div>
-</div>
-    #splash-screen {
+/* Splash Screen Overlay */
+#splash-screen {
     position: fixed;
     top: 0;
     left: 0;
@@ -583,7 +579,7 @@ textarea.fridge-input:focus {
 <body>
 
 <div class="app-wrapper">
-    <!-- Splash Screen з векторною емблемою шеф-кухаря -->
+    <!-- Анімований сплеш із вбудованою іконкою -->
     <div id="splash-screen">
         <svg class="splash-icon" viewBox="0 0 512 512">
             <defs>
@@ -629,6 +625,7 @@ textarea.fridge-input:focus {
     </header>
 
     <main class="view-container">
+        <!-- 1. Home -->
         <section id="view-home" class="view-section active">
             <div class="glass-card">
                 <h2 class="section-title">🧺 <span id="i18n-fridge-title">Що у вас є?</span></h2>
@@ -667,6 +664,7 @@ textarea.fridge-input:focus {
             </div>
         </section>
 
+        <!-- 2. Results -->
         <section id="view-results" class="view-section">
             <div class="filter-chips">
                 <button class="chip active" data-cat="all" id="i18n-chip-all">Всі</button>
@@ -679,16 +677,19 @@ textarea.fridge-input:focus {
             <div id="results-content"></div>
         </section>
 
+        <!-- 3. Detail -->
         <section id="view-detail" class="view-section">
             <button class="btn-back" id="btn-back">← <span id="i18n-back-btn">Назад</span></button>
             <div id="recipe-detail-content"></div>
         </section>
 
+        <!-- 4. Favorites -->
         <section id="view-favorites" class="view-section">
             <h2 class="section-title">⭐ <span id="i18n-fav-title">Обрані рецепти</span></h2>
             <div id="favorites-content"></div>
         </section>
 
+        <!-- 5. Cart -->
         <section id="view-cart" class="view-section">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
                 <h2 class="section-title" style="margin-bottom:0">📋 <span id="i18n-cart-title">Список покупок</span></h2>
@@ -697,6 +698,7 @@ textarea.fridge-input:focus {
             <div id="cart-content"></div>
         </section>
 
+        <!-- 6. Settings -->
         <section id="view-settings" class="view-section">
             <h2 class="section-title">⚙️ <span id="i18n-settings-title">Налаштування</span></h2>
             
@@ -1333,7 +1335,6 @@ function setLanguage(lang) {
 document.addEventListener('DOMContentLoaded', () => {
     updateCartBadge();
 
-    // Заставка плавно зникає
     setTimeout(() => {
         const splash = document.getElementById('splash-screen');
         if (splash) splash.classList.add('hidden');
