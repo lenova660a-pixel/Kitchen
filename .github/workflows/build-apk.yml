@@ -38,6 +38,7 @@ jobs:
 
       - name: Force Custom App Icon & Splash for Android 11-15
         run: |
+          pip install --quiet Pillow
           python3 - << 'EOF'
           import os
           from PIL import Image
